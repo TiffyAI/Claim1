@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TiffyAI Wallet Setup</title>
   <style>
     body {
@@ -57,7 +57,10 @@
 
     #installMetaMaskBtn {
       background: linear-gradient(90deg, #ff4aa2, #9055ff);
-      display: none;
+    }
+
+    #claimBtn {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
     }
 
     #walletAddress {
@@ -66,6 +69,7 @@
       font-family: monospace;
     }
 
+    /* --- Tiffy Assistant --- */
     #tiffyAssistant {
       position: fixed;
       bottom: 20px;
@@ -123,7 +127,8 @@
     <button id="connectWalletBtn">Connect Wallet</button>
     <button id="addTestnetBtn">Add BNB Testnet</button>
     <button id="importTokenBtn">Show My TiffyAI Token</button>
-    <button id="installMetaMaskBtn">Activate or Install MetaMask</button>
+    <button id="installMetaMaskBtn" style="display:none;">Activate or Install MetaMask</button>
+    <button id="claimBtn">Claim 1 TiffyAI & 1 Blue Key</button>
     <div id="walletAddress"></div>
   </div>
 
@@ -131,7 +136,7 @@
   <div id="tiffyAssistant" onclick="toggleSpeech()">
     <img src="TiffyAI.jpg" alt="Tiffy Assistant" />
     <div id="tiffySpeech">
-      <p id="tiffyText">Hey, need help setting up your wallet?</p>
+      <p id="tiffyText">Hey,. Need help setting up your wallet?</p>
       <div id="tiffyOptions">
         <button onclick="tiffyReplyYes()">Yes, help me</button>
         <button onclick="tiffyReplyNo()">No, I’m good</button>
@@ -165,7 +170,7 @@
     }
 
     async function connectWallet() {
-      if (!window.ethereum) {
+      if (typeof window.ethereum === 'undefined') {
         installMetaMaskBtn.style.display = 'inline-block';
         return;
       }
@@ -180,7 +185,7 @@
     }
 
     async function addBNBTestnet() {
-      if (!window.ethereum) {
+      if (typeof window.ethereum === 'undefined') {
         installMetaMaskBtn.style.display = 'inline-block';
         return;
       }
@@ -241,8 +246,13 @@
     importTokenBtn.onclick = importTiffyToken;
     installMetaMaskBtn.onclick = openMetaMaskInstall;
 
+    document.getElementById('claimBtn').onclick = () => {
+      window.open('https://metamask.app.link/dapp/tiffyai.github.io/Blue-Key-Claim/', '_blank');
+    };
+
     window.addEventListener('load', () => {
       let retries = 0;
+
       function checkEthereum() {
         if (typeof window.ethereum !== 'undefined') {
           connectBtn.style.display = 'inline-block';
@@ -252,12 +262,13 @@
         } else {
           retries++;
           if (retries < 10) {
-            setTimeout(checkEthereum, 300);
+            setTimeout(checkEthereum, 200);
           } else {
             installMetaMaskBtn.style.display = 'inline-block';
           }
         }
       }
+
       checkEthereum();
     });
 
@@ -277,5 +288,6 @@
       document.getElementById('tiffyOptions').style.display = 'none';
     }
   </script>
+
 </body>
 </html>
